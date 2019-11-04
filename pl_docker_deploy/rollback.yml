@@ -1,0 +1,31 @@
+- hosts: "{{ hosts }}"
+  gather_facts: no
+  serial: "{{ serial }}"
+  tasks:
+
+    - name:  Get the DockerAppId which is running. step:1/4
+      shell: docker ps|egrep '{{ DockerApp }}[\ |:]'|awk '{print $1}'
+      register: DockerAppId
+      tags: always
+    - name:  Get the last exited DockerAppId . step:2/4
+      shell: docker ps -a|egrep '{{ DockerApp }}[\ |:]'|grep Exited|head -n 1|awk '{print $1}'
+      register: ExitedDockerAppId
+      tags: always
+    - name: Docker app stop. step:3/4
+      command: docker stop "{{ DockerAppId.stdout }}"
+      register: msg2
+      failed_when: "'FAILED' in msg2.stderr"
+      tags: always
+    - name: Docker app start. step:4/4
+      command: docker start "{{ ExitedDockerAppId.stdout }}"
+      tags: auto
+    - name: Docker app start. step:4/4
+      command: docker start "{{ DockerName }}"
+      tags: manual
+
+    - name: LoopEurekaHealthCheck until successful, max time(2min) . step:healthcheck
+      script: eureka_health_check2.sh "{{ AppSpringName }}"
+      tags: eureka
+
+
+
