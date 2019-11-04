@@ -29,7 +29,7 @@ def ansible_cmd_func(hosts,forks,cmd):
         while True: 
             line = pcmd.stdout.readline().strip() 
             if line:
-#                 print(str(line,encoding='utf-8'))
+                line = str(line,encoding='utf-8')
                 print(line)
             else:
                 break   
