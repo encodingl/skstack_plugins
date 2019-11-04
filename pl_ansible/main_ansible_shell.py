@@ -1,13 +1,19 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
+
+# Part1:Load dependent library
 from argparse import ArgumentParser
 import sys
 import os
-from subprocess import Popen, PIPE, STDOUT, call
-BASE_DIR = os.path.abspath('.')
+from subprocess import Popen, PIPE, STDOUT
+
+# Part2:load skstack_plugins root path for load lib_pub
+BASE_DIR = os.path.abspath("../")
 sys.path.append(BASE_DIR)
 
-import re
+# Part3:load skstack lib_pub module 
+from lib_pub.common import load_json_conf
+
 
 def parseOption(argv):
     parser = ArgumentParser(description="version 1.0.0")
@@ -46,8 +52,9 @@ def ansible_cmd_func(hosts,forks,cmd):
 def main(argv):
     options = parseOption(argv)
     hosts = options.group
-    forks = 5
     cmd = options.cmd
+    env = options.env
+    forks = load_json_conf(env, "forks")
     ansible_cmd_func(hosts,forks,cmd)
  
     

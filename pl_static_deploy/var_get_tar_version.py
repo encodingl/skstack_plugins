@@ -12,7 +12,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
 from bs4 import BeautifulSoup
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import re
 
 def parseOption(argv):
@@ -37,7 +37,7 @@ def main(argv):
     proj = options.proj
     repo_url = StaticProj[proj]["repo_url"]
 
-    url_response = urllib2.urlopen(repo_url)
+    url_response = urllib.request.urlopen(repo_url)
     html_doc = url_response.read()
     soup = BeautifulSoup(html_doc, "html.parser", from_encoding="utf-8")
     if proj == "app_h5":
@@ -50,7 +50,7 @@ def main(argv):
     for link in links:
         tar_list.append(link['href'])
     tar_list.sort(reverse=True)
-    print tar_list
+    print(tar_list)
 
 if __name__ == "__main__":
     main(sys.argv[1:])

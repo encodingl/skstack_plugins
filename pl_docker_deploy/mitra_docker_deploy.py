@@ -104,7 +104,7 @@ def ansible_deploy(hosts,app,tag,docker_run,docker_image_url,wait_times,eureka_u
             while True:
                 line = pcmd.stdout.readline().strip()
                 if line:
-                    print line
+                    print(line)
                 else:
                     break
         else:
@@ -147,7 +147,7 @@ def main(argv):
     eureka_url = MitraVars["EurekaUrl"]
     docker_run_image = "%s%s:%s" % (docker_image_url,app,tag)
     docker_run_arg = MitraVars[options.app]["DockerRunArg"]
-    if  MitraVars[options.app].has_key("DockerRunCmd"):
+    if  "DockerRunCmd" in MitraVars[options.app]:
         docker_run_cmd = MitraVars[options.app]["DockerRunCmd"]
     else :
         docker_run_cmd = "";

@@ -28,11 +28,11 @@ def ssh_cmd_func(host,port,username,password,cmd,rsa_key):
           
             if len(result) == 0:
                 break
-            print result
+            print(result)
      
             
-    except Exception, e:
-        print e
+    except Exception as e:
+        print(e)
     finally:
         client.close()
 

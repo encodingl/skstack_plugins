@@ -1,14 +1,20 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
+
+# Part1:Load dependent library
 from argparse import ArgumentParser
 import sys
 import os
-import json
-BASE_DIR = os.path.abspath('.')
-sys.path.append(BASE_DIR)
-
 import re
 
+# Part2:load skstack_plugins root path for load lib_pub
+BASE_DIR = os.path.abspath("../")
+sys.path.append(BASE_DIR)
+
+# Part3:load skstack lib_pub module 
+from lib_pub.common import load_json_conf
+
+# Part4:Define optional variables
 def parseOption(argv):
     parser = ArgumentParser(description="version 1.0.0")
     parser.add_argument("-e", "--environment", dest="env", help="input the environment in which the script needs to be executed ",
@@ -18,10 +24,10 @@ def parseOption(argv):
     if not len(argv): parser.print_help();sys.exit(1)
     return args 
 
+# Part5:Define the task function
 def get_AnsibleHostsDic(args):
     dic = {}
     pattern = r'^\s*\[.+\]'
-
     with open(args) as f:
         for line in f:
             temp = line.split()
@@ -37,33 +43,17 @@ def get_AnsibleHostsDic(args):
                     except:
                         pass
                     
-  
     list_group_key = list(dic.keys())
     list_group_key.sort()
 
     return list_group_key
+
+# Part6:Define the main function,accept parameters passed to the task function to executes 
 def main(argv):
     options = parseOption(argv)
-    config_file = options.env+"_conf.json"
-   
-    CONFIGFILE = os.path.join(BASE_DIR, 'conf', config_file)
-    
-    
-    if os.path.exists(CONFIGFILE):
-        
-        with open(CONFIGFILE, "r") as f:
-            line = f.readline()
-            d=json.loads(line)
-            ansible_hosts_file = d["ansible_hosts_file"]
-            print(ansible_hosts_file)
-        
-    else:
-        print("%s is not exist" % CONFIGFILE)
-        sys.exit(1)
-    
-    
- 
-    
+    env = options.env
+    ansible_hosts_file = load_json_conf(env, "ansible_hosts_file")
+
     list_group_key=get_AnsibleHostsDic(ansible_hosts_file)
     print(list_group_key)
     

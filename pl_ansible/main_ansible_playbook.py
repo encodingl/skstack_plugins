@@ -28,13 +28,13 @@ def ansible_playbook_func(playbook_file,forks):
         pcmd = Popen(ansible_cmd, stdout=PIPE, stderr=STDOUT, shell=True)
         while True:
             for i in iter(pcmd.stdout.readline,b''):
-                print i
+                print(i)
             if pcmd.poll() is not None:
 
                 break     
     except:
         exinfo=sys.exc_info()
-        print exinfo
+        print(exinfo)
         return False
         
     

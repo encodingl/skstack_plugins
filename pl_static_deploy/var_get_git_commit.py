@@ -42,7 +42,7 @@ def main(argv):
 
     commit_lists = get_git_commitid_by_command(repo_url, proj_local_path,branch)
 
-    print commit_lists
+    print(commit_lists)
 
 if __name__ == "__main__":
     main(sys.argv[1:])

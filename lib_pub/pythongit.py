@@ -63,7 +63,7 @@ def git_check_out_by_commit_num(git_url, repo_path, git_commit):
         cwd=repo_path,
         stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
 
-    print check_info.stdout.readline()
+    print(check_info.stdout.readline())
 
 def get_git_commitid_by_command(git_url, repo_path, branch,num=10, git_commit=''):
     if not os.path.isdir(repo_path):

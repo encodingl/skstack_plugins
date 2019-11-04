@@ -32,9 +32,9 @@ if __name__ == '__main__':
         key_file='/OTHER/PATH/keys/id_rsa.pub'
         )
 
-    print "PROC", stats.processed
-    print "FAIL", stats.failures
-    print "OK  ", stats.ok
-    print "DARK", stats.dark
-    print "CHGD", stats.changed
-    print "SKIP", stats.skipped
+    print("PROC", stats.processed)
+    print("FAIL", stats.failures)
+    print("OK  ", stats.ok)
+    print("DARK", stats.dark)
+    print("CHGD", stats.changed)
+    print("SKIP", stats.skipped)
