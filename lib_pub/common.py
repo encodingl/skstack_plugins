@@ -7,8 +7,7 @@ import sys
 
 
 
-def load_pri_json_conf(env,key):
-    CONFIG_BASE_DIR = os.path.abspath('.')
+def load_pri_json_conf(CONFIG_BASE_DIR,env,key):
     config_file = env+"_conf.json"
     abs_config_file = os.path.join(CONFIG_BASE_DIR, 'conf', config_file)
     if os.path.exists(abs_config_file):
@@ -22,9 +21,9 @@ def load_pri_json_conf(env,key):
         sys.exit(1)
         
 def load_pub_json_conf(env,key):
-    CONFIG_BASE_DIR = os.path.abspath('..')
+    CONFIG_PUB_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     config_file = env+"_conf.json"
-    abs_config_file = os.path.join(CONFIG_BASE_DIR, 'conf_pub', config_file)
+    abs_config_file = os.path.join(CONFIG_PUB_DIR, 'conf_pub', config_file)
     if os.path.exists(abs_config_file):
         with open(abs_config_file, "r") as f:
             d=json.loads(f.read())

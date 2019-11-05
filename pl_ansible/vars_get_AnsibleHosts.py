@@ -7,8 +7,9 @@ import sys
 import os
 import re
 
-# Part2:load skstack_plugins root path for load lib_pub
-BASE_DIR = os.path.abspath("../")
+# Part2:load skstack_plugins env to sys
+CONFIG_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
 
 # Part3:load skstack lib_pub module 
@@ -52,7 +53,7 @@ def get_AnsibleHostsDic(args):
 def main(argv):
     options = parseOption(argv)
     env = options.env
-    ansible_hosts_file = load_json_conf(env, "ansible_hosts_file")
+    ansible_hosts_file = load_pri_json_conf(CONFIG_BASE_DIR,env, "ansible_hosts_file")
 
     list_group_key=get_AnsibleHostsDic(ansible_hosts_file)
     print(list_group_key)

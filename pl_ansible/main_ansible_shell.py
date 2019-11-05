@@ -6,14 +6,17 @@ from argparse import ArgumentParser
 import sys
 import os
 from subprocess import Popen, PIPE, STDOUT
+import datetime
 
 # Part2:load skstack_plugins root path for load lib_pub
-BASE_DIR = os.path.abspath("../")
+CONFIG_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
+
 
 # Part3:load skstack lib_pub module 
 from lib_pub.common import load_pri_json_conf,load_pub_json_conf
-from lib_pub.logger import sklog_init
+from lib_pub.logger import sklog_original
 
 
 def parseOption(argv):
@@ -31,8 +34,9 @@ def parseOption(argv):
 
 # Part5:Define the task function
 def ansible_cmd_func(hosts,forks,cmd,log_file):
-    sklog = sklog_init(log_file)
+    sklog = sklog_original(log_file)
     ansible_cmd = "ansible %s -f %s  -m shell -a '%s' " % (hosts,forks,cmd)
+    sklog.info("%s INFO the ansible shell task started" % datetime.datetime.now())
     try:        
         pcmd = Popen(ansible_cmd, stdout=PIPE, stderr=STDOUT, shell=True) 
         while True: 
@@ -49,7 +53,7 @@ def ansible_cmd_func(hosts,forks,cmd,log_file):
     
     retcode = pcmd.wait()
     if retcode == 0:
-        pass
+        sklog.info("%s INFO the ansible shell task finished" % datetime.datetime.now())
     else:
         raise Exception("Command failed")
     
@@ -59,8 +63,9 @@ def main(argv):
     hosts = options.group
     cmd = options.cmd
     env = options.env
-    forks = load_pri_json_conf(env, "forks")
-    log_path = load_pub_json_conf(env, "forks")
+    
+    forks = load_pri_json_conf(CONFIG_BASE_DIR,env, "forks")
+    log_path = load_pub_json_conf(env, "log_path")
     log_file = log_path + "ansible_shell.log"
     ansible_cmd_func(hosts,forks,cmd,log_file)
  

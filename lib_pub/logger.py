@@ -31,6 +31,28 @@ def sklog_init(log_file):
     sklog.addHandler(fhlog)
     return sklog
 
+def sklog_original(log_file):
+    sklog = logging.getLogger()  # 不加名称设置root logger
+    sklog.setLevel(logging.INFO)
+    formatter = logging.Formatter(
+        '%(message)s',
+        )
+
+    # 使用FileHandler输出到文件
+    fhlog = logging.FileHandler(log_file)
+    fhlog.setLevel(logging.INFO)
+    fhlog.setFormatter(formatter)
+
+    # 使用StreamHandler输出到屏幕
+    chlog = logging.StreamHandler()
+    chlog.setLevel(logging.INFO)
+    chlog.setFormatter(formatter)
+
+    # 添加两个Handler
+    sklog.addHandler(chlog)
+    sklog.addHandler(fhlog)
+    return sklog
+
 if __name__ == "__main__":
     pass
     # sklog.info('this is info message')
