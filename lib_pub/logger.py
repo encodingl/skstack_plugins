@@ -9,8 +9,7 @@ sys.path.append(BASE_DIR)
 import logging
 
 
-def sklog_init(log_name):
-    from conf.skplugins_conf import log_path
+def sklog_init(log_file):
     sklog = logging.getLogger()  # 不加名称设置root logger
     sklog.setLevel(logging.INFO)
     formatter = logging.Formatter(
@@ -18,7 +17,6 @@ def sklog_init(log_name):
         datefmt='%Y-%m-%d %H:%M:%S.%03d')
 
     # 使用FileHandler输出到文件
-    log_file = log_path+log_name
     fhlog = logging.FileHandler(log_file)
     fhlog.setLevel(logging.INFO)
     fhlog.setFormatter(formatter)

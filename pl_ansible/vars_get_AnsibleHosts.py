@@ -12,7 +12,7 @@ BASE_DIR = os.path.abspath("../")
 sys.path.append(BASE_DIR)
 
 # Part3:load skstack lib_pub module 
-from lib_pub.common import load_json_conf
+from lib_pub.common import load_pri_json_conf
 
 # Part4:Define optional variables
 def parseOption(argv):
