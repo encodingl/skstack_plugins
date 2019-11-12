@@ -3,11 +3,11 @@
 from optparse import OptionParser
 import sys
 import os
-from subprocess import Popen, PIPE, STDOUT, call
+from subprocess import Popen, PIPE, STDOUT
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
 
-import re
+
 
 def parseOption(argv):
     parser = OptionParser(version="%prog 1.0.0")

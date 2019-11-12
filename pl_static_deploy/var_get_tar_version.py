@@ -1,42 +1,39 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-'''
-Created on 2018年7月18日 @author: skipper
-'''
+
+# Part1:Load dependent library
+from argparse import ArgumentParser
 import sys
-from optparse import OptionParser
 import os
-
-
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(BASE_DIR)
 from bs4 import BeautifulSoup
-import urllib.request, urllib.error, urllib.parse
+import urllib.request
 import re
 
-def parseOption(argv):
-    parser = OptionParser(version="%prog 1.0.0")
+# Part2:load skstack_plugins root path for load lib_pub
+CONFIG_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(BASE_DIR)
 
-    parser.add_option("-p", "--tar-proj", dest="proj", metavar="[tar_project_name]",
+from lib_pub.common import load_pri_json_conf
+
+def parseOption(argv):
+    parser = ArgumentParser(description="version 2.0.0")
+
+    parser.add_argument("-p", "--tar-proj", dest="proj", metavar="[tar_project_name]",
                         help="the static tar.gz project name you want to depoly")
 
-    parser.add_option("-e", "--environment", dest="env", metavar="[prod|stg|dev]",
+    parser.add_argument("-e", "--environment", dest="env", metavar="[prod|stg|dev]",
                       help="the environment you need deploy ")
 
-    (options, args) = parser.parse_args()
-    if not len(argv):
-        parser.print_help()
-        sys.exit(1)
-    return options
+    args = parser.parse_args()
+    if not len(argv): parser.print_help();sys.exit(1) 
+    return args
 
 def main(argv):
     options = parseOption(argv)
-    config_file = "static_conf_" + options.env
-    exec ("from conf." + config_file + " import StaticProj")
+    env = options.env
     proj = options.proj
-    repo_url = StaticProj[proj]["repo_url"]
-
+    repo_url = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["repo_url"]
     url_response = urllib.request.urlopen(repo_url)
     html_doc = url_response.read()
     soup = BeautifulSoup(html_doc, "html.parser", from_encoding="utf-8")

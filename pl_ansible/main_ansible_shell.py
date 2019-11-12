@@ -18,9 +18,9 @@ sys.path.append(BASE_DIR)
 from lib_pub.common import load_pri_json_conf,load_pub_json_conf
 from lib_pub.logger import sklog_original
 
-
+# Part4:Define the script argument 
 def parseOption(argv):
-    parser = ArgumentParser(description="version 1.0.0")
+    parser = ArgumentParser(description="version 2.0.0")
     parser.add_argument("-e", "--environment", dest="env", help="input the environment in which the script needs to be executed ",
                         metavar="[prod|stg|dev|...]")
     parser.add_argument("-g", "--group", dest="group", help="input the ansible hosts group",
@@ -63,7 +63,6 @@ def main(argv):
     hosts = options.group
     cmd = options.cmd
     env = options.env
-    
     forks = load_pri_json_conf(CONFIG_BASE_DIR,env, "forks")
     log_path = load_pub_json_conf(env, "log_path")
     log_file = log_path + "ansible_shell.log"

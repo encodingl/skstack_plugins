@@ -62,7 +62,7 @@ def git_check_out_by_commit_num(git_url, repo_path, git_commit):
         cwd=repo_path,
         stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
 
-    print(check_info.stdout.readline())
+    print(check_info.stdout.readline().decode())
 
 def get_git_commitid_by_command(git_url, repo_path, branch,num=10, git_commit=''):
     if not os.path.isdir(repo_path):
@@ -75,5 +75,5 @@ def get_git_commitid_by_command(git_url, repo_path, branch,num=10, git_commit=''
         cwd=repo_path,
         stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
 
-    list_tumple_commitid = [x.strip('\n') for x in list_commitid.stdout.readlines() if x is not None]
+    list_tumple_commitid = [x.decode().strip('\n') for x in list_commitid.stdout.readlines() if x is not None]
     return list_tumple_commitid

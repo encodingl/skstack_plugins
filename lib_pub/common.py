@@ -12,7 +12,7 @@ def load_pri_json_conf(CONFIG_BASE_DIR,env,key):
     abs_config_file = os.path.join(CONFIG_BASE_DIR, 'conf', config_file)
     if os.path.exists(abs_config_file):
         with open(abs_config_file, "r") as f:
-            d=json.loads(f.read())
+            d=json.load(f)
             v1 = d[key]
             return v1
         
@@ -26,7 +26,7 @@ def load_pub_json_conf(env,key):
     abs_config_file = os.path.join(CONFIG_PUB_DIR, 'conf_pub', config_file)
     if os.path.exists(abs_config_file):
         with open(abs_config_file, "r") as f:
-            d=json.loads(f.read())
+            d=json.load(f)
             v1 = d[key]
             return v1
         

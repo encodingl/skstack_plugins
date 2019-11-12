@@ -1,0 +1,3 @@
+#pl_static_deploy dependent library
+GitPython==2.1.5
+bs4==0.0.1

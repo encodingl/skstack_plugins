@@ -5,15 +5,16 @@ from optparse import OptionParser
 import sys
 import os
 import re
-from subprocess import Popen, PIPE, STDOUT, call
 
+# Part2:load skstack_plugins root path for load lib_pub
+CONFIG_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
-from libSK.logger import sklog_init
-sklog = sklog_init("static_deploy.log")
 
-from libSK.pythongit import git_check_out_by_commit_num
-from libSK.common import get_repo_file
+# Part3:load skstack lib_pub module 
+from lib_pub.common import load_pri_json_conf
+from .lib_pri.git import git_check_out_by_commit_num
+
 
 
 def parseOption(argv):
@@ -31,28 +32,21 @@ def parseOption(argv):
     parser.add_option("-f", "--file-name", dest="file", metavar="[file_name]",
                       help="the file name you want to depoly")
 
-    (options, args) = parser.parse_args()
-    if not len(argv):
-        parser.print_help()
-        sys.exit(1)
-    return options
+    args = parser.parse_args()
+    if not len(argv): parser.print_help();sys.exit(1) 
+    return args
 
 
 def main(argv):
     options = parseOption(argv)
-    config_file = "static_conf_" + options.env
-    exec ("from conf." + config_file + " import StaticProj")
-
-
+    env = options.env
     hosts = options.proj
-    proj_type = StaticProj[options.proj]["type"]
-    repo_url = StaticProj[options.proj]["repo_url"]
-    proj_local_path = StaticProj[options.proj]["proj_local_path"]
-    deploy_src_path = StaticProj[options.proj]["deploy_src_path"]
-    deploy_dest_path = StaticProj[options.proj]["deploy_dest_path"]
-    delete_enable = StaticProj[options.proj]["delete_enable"]
-    owner = StaticProj[options.proj]["owner"]
-    group = StaticProj[options.proj]["group"]
+    proj = hosts
+
+    proj_type = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["type"]
+    repo_url = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["repo_url"]
+    proj_local_path = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["proj_local_path"]
+
     if proj_type == "git_nodejs":
         commit_str = options.id
         pattern = re.compile(r'\w+')
