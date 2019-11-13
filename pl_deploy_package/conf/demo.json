@@ -1,0 +1,22 @@
+{
+	"proj1":{"type":"tar",
+	             "repo_url":"http://nginx_host/proj1/",
+	             "proj_local_path":"/opt/tarsource/proj1/",
+	             "deploy_src_path":"/opt/tarsource/proj1/sub1/",
+	             "deploy_dest_path":"/nginx_root_path/proj1/",
+	             "rsync_opts":[],
+	             "delete_enable":"no",
+	             "owner": "nginx",
+	             "group": "nginx"},
+
+	"proj2":{"type":"tar",
+	             "repo_url":"http://nginx_host/proj2/",
+	             "proj_local_path":"/opt/tarsource/proj2/",
+	             "deploy_src_path":"/opt/tarsource/proj2/",
+	             "deploy_dest_path":"/nginx_root_path/proj2/",
+	             "rsync_opts":["--no-motd","--exclude=RedisConnect.php","--exclude=config","--exclude=runtime"],
+	             "delete_enable":"no",
+	             "owner": "nginx",
+	             "group": "nginx"}
+
+}

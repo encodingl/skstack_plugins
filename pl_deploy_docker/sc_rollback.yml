@@ -24,7 +24,7 @@
       tags: manual
 
     - name: LoopEurekaHealthCheck until successful, max time(2min) . step:healthcheck
-      script: eureka_health_check2.sh "{{ AppSpringName }}"
+      script: sc_eureka_health_check.sh "{{ EurekaUrl }}" "{{ AppSpringName }}"
       tags: eureka
 
 

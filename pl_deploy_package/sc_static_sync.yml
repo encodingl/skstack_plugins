@@ -2,24 +2,14 @@
   gather_facts: no
   serial: 1
   tasks:
-    - name:  sync to the destination
-      synchronize:
-        src: "{{ deploy_src_path }}"
-        dest: "{{ deploy_dest_path }}"
-        delete: "{{ delete_enable }}"
-      tags: common
 
-    - name:  sync php_frontend to the destination
+    - name:  sync  to the destination
       synchronize:
         src: "{{ deploy_src_path }}"
         dest: "{{ deploy_dest_path }}"
         delete: "{{ delete_enable }}"
-        rsync_opts:
-          - "--no-motd"
-          - "--exclude=RedisConnect.php"
-          - "--exclude=config"
-          - "--exclude=runtime"
-      tags: php_frontend
+        rsync_opts: "{{ rsync_opts }}"
+      tags: common
 
     - name: change dir owner
       file:

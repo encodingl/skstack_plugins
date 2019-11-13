@@ -21,7 +21,7 @@
     - name: Step:7/8:Docker app run.
       command: "{{ DockerRun }}"
     - name: Step:8/8:LoopHealthCheck until successful, max time(2min).
-      script: eureka_health_check.sh "{{ AppInstance.stdout }}"
+      script: sc_eureka_health_check.sh "{{ EurekaUrl }}" "{{ AppSpringName }}"
 
 
 

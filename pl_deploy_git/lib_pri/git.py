@@ -4,8 +4,15 @@
 from git import Repo
 import os
 import subprocess
-from lib_pub.common import makedirs_ignore_error
+from lib_pub.logger import sklog_init
 
+def makedirs_ignore_error(path, mode=0o777):
+    '''调用 os.makedirs 但忽略 OSError 类型错误'''
+    try:
+        os.makedirs(path, mode)
+    except OSError:
+        pass
+    return os.path.isdir(path)
 def git_clone(git_url, repo_path):
     makedirs_ignore_error(repo_path)
     Repo.clone_from(url=git_url, to_path=repo_path)
@@ -41,7 +48,8 @@ def get_git_commitid(git_url, repo_path, num=10, git_commit=''):
 
     return list_tumple_commitid
 
-def git_check_out_by_commit_num(git_url, repo_path, git_commit):
+def git_check_out_by_commit_num(git_url, repo_path, git_commit,log_file):
+    sklog = sklog_init(log_file)
     if not os.path.isdir(repo_path):
         git_clone(git_url,repo_path)
 
@@ -62,7 +70,7 @@ def git_check_out_by_commit_num(git_url, repo_path, git_commit):
         cwd=repo_path,
         stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
 
-    print(check_info.stdout.readline().decode())
+    sklog.info(check_info.stdout.readline().decode())
 
 def get_git_commitid_by_command(git_url, repo_path, branch,num=10, git_commit=''):
     if not os.path.isdir(repo_path):

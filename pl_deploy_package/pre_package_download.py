@@ -1,10 +1,10 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from optparse import OptionParser
+from argparse import ArgumentParser
 import sys
 import os
-import re
+
 
 # Part2:load skstack_plugins root path for load lib_pub
 CONFIG_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -12,26 +12,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
 
 # Part3:load skstack lib_pub module 
-from lib_pub.common import load_pri_json_conf
-from .lib_pri.git import git_check_out_by_commit_num
-
-
+from lib_pub.common import load_pri_json_conf,load_pub_json_conf
+from pl_deploy_package.lib_pri.func import get_repo_file
 
 def parseOption(argv):
-    parser = OptionParser(version="%prog 1.0.0")
-
-    parser.add_option("-p", "--git-proj", dest="proj", metavar="[git_project_name]",
+    parser = ArgumentParser(description="version 2.0.0")
+    parser.add_argument("-p", "--git-proj", dest="proj", metavar="[git_project_name]",
                         help="the static git project name you want to depoly")
-
-    parser.add_option("-e", "--environment", dest="env", metavar="[prod|stg|dev]",
+    parser.add_argument("-e", "--environment", dest="env", metavar="[prod|stg|dev]",
                       help="the environment you need deploy ")
-
-    parser.add_option("-i", "--commit-id", dest="id", metavar="[git_commit_id]",default="master",
-                      help="the git commit id you want to depoly")
-
-    parser.add_option("-f", "--file-name", dest="file", metavar="[file_name]",
+    parser.add_argument("-f", "--file-name", dest="file", metavar="[file_name]",
                       help="the file name you want to depoly")
-
     args = parser.parse_args()
     if not len(argv): parser.print_help();sys.exit(1) 
     return args
@@ -42,17 +33,14 @@ def main(argv):
     env = options.env
     hosts = options.proj
     proj = hosts
-
+    log_path = load_pub_json_conf(env, "log_path")
+    log_file = log_path + "pl_deploy_package.log"
     proj_type = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["type"]
     repo_url = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["repo_url"]
     proj_local_path = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["proj_local_path"]
-
-    if proj_type == "git_nodejs":
-        commit_str = options.id
-        pattern = re.compile(r'\w+')
-        m = pattern.match(commit_str)
-        commit_id = m.group(0)
-        git_check_out_by_commit_num(repo_url, proj_local_path, commit_id)
+    if proj_type == "tar":
+        version_id = options.file
+        get_repo_file(proj_type,repo_url,proj_local_path,version_id,log_file)
     else:
         pass
 
