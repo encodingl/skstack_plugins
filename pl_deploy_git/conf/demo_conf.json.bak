@@ -1,0 +1,21 @@
+{
+
+	"proj1":{"type":"git",
+	             "repo_url":"http://git_host/path/proj1.git",
+	             "proj_local_path":"/opt/gitsource/proj1",
+	             "deploy_src_path":"/opt/gitsource/proj1",
+	             "deploy_dest_path":"/opt/soft/",
+	             "delete_enable":"no",
+	             "owner": "nginx",
+	             "group": "nginx"},
+	
+	"proj2":{"type":"tar",
+	             "repo_url":"http://nginx_host/h5/",
+	             "proj_local_path":"/opt/tarsource/proj2/",
+	             "deploy_src_path":"/opt/tarsource/proj2/sub1/",
+	             "deploy_dest_path":"/nginx_root_path/proj2/",
+	             "delete_enable":"no",
+	             "owner": "nginx",
+	             "group": "nginx"}
+
+}
