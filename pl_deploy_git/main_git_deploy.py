@@ -16,7 +16,7 @@ sys.path.append(BASE_DIR)
 
 # Part3:load skstack lib_pub module 
 from lib_pub.common import load_pri_json_conf,load_pub_json_conf
-from lib_pub.logger import sklog_init
+from lib_pub.logger import sklog_original
 
 
 
@@ -36,7 +36,7 @@ def parseOption(argv):
 
 # Part5:Define the task function
 def static_deploy(change_owner_tag,hosts,deploy_src_path,deploy_dest_path,delete_enable,owner,group,log_file,rsync_opts):
-    sklog = sklog_init(log_file)
+    sklog = sklog_original(log_file)
     sklog.info("start deploy static files")
     vars_dic = {
         "hosts":hosts,
