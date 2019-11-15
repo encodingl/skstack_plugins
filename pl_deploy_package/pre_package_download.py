@@ -19,7 +19,7 @@ def parseOption(argv):
     parser = ArgumentParser(description="version 2.0.0")
     parser.add_argument("-p", "--git-proj", dest="proj", metavar="[git_project_name]",
                         help="the static git project name you want to depoly")
-    parser.add_argument("-e", "--environment", dest="env", metavar="[prod|stg|dev]",
+    parser.add_argument("-e", "--environment", dest="env", metavar="[prod|stage|dev]",
                       help="the environment you need deploy ")
     parser.add_argument("-f", "--file-name", dest="file", metavar="[file_name]",
                       help="the file name you want to depoly")

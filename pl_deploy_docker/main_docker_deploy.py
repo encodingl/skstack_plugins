@@ -42,7 +42,7 @@ def parseOption(argv):
     parser = ArgumentParser(description="version 2.0.0")
     parser.add_argument("-e", "--Environment", dest="env",
                       help="input the environment in which the script needs to be executed ",
-                      metavar="[prod|stg|dev...]")
+                      metavar="[prod|stage|dev...]")
     parser.add_argument("-p", "--proj-docker", dest="proj", metavar="[proj01|proj02|...]",
                         help="the docker project you want to depoly")
     parser.add_argument("-t", "--DockerImageTag", dest="tag", help="input the docker image tag default=latest",default="latest",

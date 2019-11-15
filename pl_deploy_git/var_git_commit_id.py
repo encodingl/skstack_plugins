@@ -20,7 +20,7 @@ def parseOption(argv):
     parser.add_argument("-p", "--proj-git", dest="proj", metavar="[git_project_name]",
                         help="the static git project name you want to depoly")
 
-    parser.add_argument("-e", "--environment", dest="env", metavar="[prod|stg|dev]",
+    parser.add_argument("-e", "--environment", dest="env", metavar="[prod|stage|dev]",
                       help="the environment you need deploy ")
     
     parser.add_argument("-b", "--branch", dest="branch", metavar="[master|feature-xxx]",default="master",

@@ -42,7 +42,7 @@ def parseOption(argv):
     parser = OptionParser(version="%prog 1.0.0")
     parser.add_option("-e", "--Environment", dest="env",
                       help="input the environment in which the script needs to be executed ",
-                      metavar="[prod|stg|dev...]")
+                      metavar="[prod|stage|dev...]")
     parser.add_option("-a", "--DockerAppName", dest="app", help="input the appname for docker",
                       metavar="[app01|app02|...]")
     parser.add_option("-n", "--DockerRollBackName", dest="name", help="input the docker run name you need to rollback",

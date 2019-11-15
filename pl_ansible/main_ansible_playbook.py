@@ -12,7 +12,7 @@ sys.path.append(BASE_DIR)
 def parseOption(argv):
     parser = OptionParser(version="%prog 1.0.0")
     parser.add_option("-e", "--environment", dest="env", help="input the environment in which the script needs to be executed ",
-                        metavar="[prod|stg|...]")
+                        metavar="[prod|stage|...]")
    
     parser.add_option("-f", "--playbook", dest="pbook", help="input the command",
                         metavar="[ls|cd|...]")

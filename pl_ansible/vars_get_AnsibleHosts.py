@@ -19,7 +19,7 @@ from lib_pub.common import load_pri_json_conf
 def parseOption(argv):
     parser = ArgumentParser(description="version 1.0.0")
     parser.add_argument("-e", "--environment", dest="env", help="input the environment in which the script needs to be executed ",
-                        metavar="[prod|stg|...]")
+                        metavar="[prod|stage|...]")
    
     args = parser.parse_args()
     if not len(argv): parser.print_help();sys.exit(1)

@@ -22,7 +22,7 @@ from lib_pub.logger import sklog_original
 def parseOption(argv):
     parser = ArgumentParser(description="version 2.0.0")
     parser.add_argument("-e", "--environment", dest="env", help="input the environment in which the script needs to be executed ",
-                        metavar="[prod|stg|dev|...]")
+                        metavar="[prod|stage|dev|...]")
     parser.add_argument("-g", "--group", dest="group", help="input the ansible hosts group",
                         metavar="[gp01|ip|...]")
     parser.add_argument("-c", "--command", dest="cmd", help="input the command",

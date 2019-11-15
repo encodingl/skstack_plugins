@@ -19,7 +19,7 @@ from lib_pub.common import load_pri_json_conf
 def parseOption(argv):
     parser = ArgumentParser(description="version 2.0.0")
     
-    parser.add_argument("-e", "--environment", dest="env", metavar="[prod|stg|dev]",
+    parser.add_argument("-e", "--environment", dest="env", metavar="[prod|stage|dev]",
                       help="the environment you need deploy ")
     parser.add_argument("-p", "--proj-package", dest="proj", metavar="[project_name]",
                         help="the static tar.gz project name you want to depoly")
