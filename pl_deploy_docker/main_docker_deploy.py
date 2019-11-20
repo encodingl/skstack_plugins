@@ -143,7 +143,7 @@ def main(argv):
     exec_mode = options.mode
   
     opt_hosts = options.hosts
-    json_hosts = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["hosts"]    
+    json_hosts = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["hosts"]
     if opt_hosts != "none" :
         hosts = opt_hosts
     elif opt_hosts == "none" and json_hosts != "none":

@@ -24,6 +24,8 @@ def parseOption(argv):
                         help="the static git project name you want to depoly")
     parser.add_argument("-e", "--environment", dest="env", metavar="[prod|stage|dev]",
                       help="the environment you need deploy ")
+    parser.add_argument("-a", "--ansible-hosts", dest="hosts", metavar="[ansible-hosts]",default="none",
+                        help="the destination hosts you want to depoly")
     
     args = parser.parse_args()
     if not len(argv): parser.print_help();sys.exit(1) 
@@ -71,8 +73,16 @@ def static_deploy(change_owner_tag,hosts,deploy_src_path,deploy_dest_path,delete
 def main(argv):
     options = parseOption(argv)
     env = options.env
-    hosts = options.proj
-    proj = hosts
+    proj = options.proj
+    opt_hosts = options.hosts
+    json_hosts = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["hosts"]
+    if opt_hosts != "none" :
+        hosts = opt_hosts
+    elif opt_hosts == "none" and json_hosts != "none":
+        hosts = json_hosts
+    else:
+        hosts = proj
+        
     log_path = load_pub_json_conf(env, "log_path")
     log_file = log_path + "pl_deploy_package.log"
    
