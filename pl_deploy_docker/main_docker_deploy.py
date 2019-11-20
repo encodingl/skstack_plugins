@@ -114,7 +114,7 @@ def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_u
         else:
             while True:
                 for i in iter(pcmd.stdout.readline,b''):
-                    i=i.strip('\n')
+                    i=i.decode().strip('\n')
                     if "FAILED" in i or " ERROR" in i:
                         sklog.error(i)
                     else:
