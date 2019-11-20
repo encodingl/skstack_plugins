@@ -47,7 +47,7 @@ def parseOption(argv):
                         help="the docker project you want to depoly")
     parser.add_argument("-t", "--DockerImageTag", dest="tag", help="input the docker image tag default=latest",default="latest",
                       metavar="[v0.1.0|latest|...]")
-    parser.add_argument("-i", "--AnsibleHosts", dest="hosts", help="input AnsibleHosts,default is the same as -a parameter",default="options.proj",
+    parser.add_argument("-a", "--AnsibleHosts", dest="hosts", help="input AnsibleHosts,default is the same as -p parameter",default="none",
                       metavar="[192.168.1.22|AnsbileHostsName|...]")
     parser.add_argument("-w", "--WaitTimes", dest="times", help="input securyty wait times for rolling update default=60s",default="60s",
                       metavar="[3s|1m|...]")
@@ -98,7 +98,7 @@ def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_u
             ansible_cmd = "ansible-playbook sc_update_hard.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s\" " % \
                           (hosts, proj, tag, docker_run, docker_image_url)
         else:
-            sklog.error("please choose the ExecMode ")
+            sklog.error("please choose the Exec Mode ")
             exit(1)
            
 
@@ -108,7 +108,7 @@ def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_u
             while True:
                 line = pcmd.stdout.readline().strip()
                 if line:
-                    print(line)
+                    sklog.info(line)
                 else:
                     break
         else:
@@ -141,9 +141,16 @@ def main(argv):
     tag = options.tag
     wait_times = options.times
     exec_mode = options.mode
-    hosts = options.hosts
-    if hosts == "options.proj":
+  
+    opt_hosts = options.hosts
+    json_hosts = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["hosts"]    
+    if opt_hosts != "none" :
+        hosts = opt_hosts
+    elif opt_hosts == "none" and json_hosts != "none":
+        hosts = json_hosts
+    else:
         hosts = proj
+        
     docker_image_url = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["DockerImageURL"]
     eureka_url = load_pri_json_conf(CONFIG_BASE_DIR,env, "public")["EurekaUrl"]
     docker_run_arg = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["DockerRunArg"]
