@@ -106,11 +106,12 @@ def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_u
         pcmd = Popen(ansible_cmd, stdout=PIPE, stderr=STDOUT, shell=True)
         if exec_mode in ["inquiry",]:
             while True:
-                line = pcmd.stdout.readline().strip()
-                if line:
-                    sklog.info(line)
-                else:
-                    break
+                for line in iter(pcmd.stdout.readline,b''):
+#                 line = pcmd.stdout.readline().strip()
+                    if line:
+                        sklog.info(line)
+                    else:
+                        break
         else:
             while True:
                 for i in iter(pcmd.stdout.readline,b''):
