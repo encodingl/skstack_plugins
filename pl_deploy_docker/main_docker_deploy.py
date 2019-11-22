@@ -131,7 +131,7 @@ def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_u
         if retcode == 0:
             pass
         else:
-            raise Exception("task failed")
+            raise Exception("task failed,please check pl_deploy_docker.log for details")
 
 def main(argv):
     options = parseOption(argv)

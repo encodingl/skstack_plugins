@@ -18,15 +18,22 @@ def git_clone(git_url, repo_path):
     Repo.clone_from(url=git_url, to_path=repo_path)
 
 def git_pull(repo_path,branch):
-    subprocess.call(
+    
+    subprocess.check_call(
         ['git', 'checkout', branch],
         cwd=repo_path,
         stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+ 
 
-    subprocess.call(
+    git_pull_info = subprocess.Popen(
         ['git', 'pull'],
         cwd=repo_path,
         stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+    retcode = git_pull_info.wait()
+    if retcode == 0:
+        pass
+    else:
+        raise Exception(git_pull_info.stdout.readline().decode())
 
 def get_git_commitid(git_url, repo_path, num=10, git_commit=''):
     if not os.path.isdir(repo_path):
@@ -50,14 +57,11 @@ def get_git_commitid(git_url, repo_path, num=10, git_commit=''):
 
 def git_check_out_by_commit_num(git_url, repo_path, git_commit,log_file):
     sklog = sklog_init(log_file)
-    if not os.path.isdir(repo_path):
-        git_clone(git_url,repo_path)
+#     if not os.path.isdir(repo_path):
+#         git_clone(git_url,repo_path)
+# 
+#     git_pull(repo_path,"master")
 
-#     git_pull(repo_path)
-    subprocess.call(
-        ['git', 'pull'],
-        cwd=repo_path,
-        stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
 
     # Git: fatal: Unable to create '.git/index.lock': File exists.
     subprocess.Popen(
@@ -69,8 +73,12 @@ def git_check_out_by_commit_num(git_url, repo_path, git_commit,log_file):
         ['git', 'checkout', git_commit],
         cwd=repo_path,
         stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+    retcode = check_info.wait()
+    if retcode == 0:
+        sklog.info(check_info.stdout.readline().decode())
+    else:
+        raise Exception(check_info.stdout.readline().decode())
 
-    sklog.info(check_info.stdout.readline().decode())
 
 def get_git_commitid_by_command(git_url, repo_path, branch,num=10, git_commit=''):
     if not os.path.isdir(repo_path):
