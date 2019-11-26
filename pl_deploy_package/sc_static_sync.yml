@@ -24,4 +24,4 @@
         path: "{{ deploy_dest_path }}"
         owner: "{{ owner }}"
         group: "{{ group }}"
-      tags: fir_change_owner
+      tags: file_change_owner
