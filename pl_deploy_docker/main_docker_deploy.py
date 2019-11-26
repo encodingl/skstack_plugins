@@ -112,6 +112,8 @@ def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_u
                         sklog.info(line)
                     else:
                         break
+                if pcmd.poll() is not None:
+                    break
         else:
             while True:
                 for i in iter(pcmd.stdout.readline,b''):
