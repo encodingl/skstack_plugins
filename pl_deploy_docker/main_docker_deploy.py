@@ -34,7 +34,7 @@ sys.path.append(BASE_DIR)
 
 # Part3:load skstack lib_pub and lib_pri module 
 from lib_pub.common import load_pri_json_conf,load_pub_json_conf
-from lib_pub.logger import sklog_init
+from lib_pub.logger import sklog_original
 
 
 
@@ -61,7 +61,7 @@ def parseOption(argv):
 
 
 def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_url,app_spring_name,exec_mode,log_file):
-    sklog = sklog_init(log_file)
+    sklog = sklog_original(log_file)
     if app_spring_name == "null":
         if exec_mode == "update":
             ansible_cmd = "ansible-playbook sc_update_hard.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s  AppSpringName=%s\" " % \
@@ -107,7 +107,7 @@ def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_u
         if exec_mode in ["inquiry",]:
             while True:
                 for line in iter(pcmd.stdout.readline,b''):
-#                 line = pcmd.stdout.readline().strip()
+                    line=line.decode().strip('\n')
                     if line:
                         sklog.info(line)
                     else:
