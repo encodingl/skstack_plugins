@@ -57,10 +57,10 @@ def get_git_commitid(git_url, repo_path, num=10, git_commit=''):
 
 def git_check_out_by_commit_num(git_url, repo_path, git_commit,log_file):
     sklog = sklog_init(log_file)
-#     if not os.path.isdir(repo_path):
-#         git_clone(git_url,repo_path)
-# 
-#     git_pull(repo_path,"master")
+    if not os.path.isdir(repo_path):
+        git_clone(git_url,repo_path)
+ 
+    git_pull(repo_path,"master")
 
 
     # Git: fatal: Unable to create '.git/index.lock': File exists.
