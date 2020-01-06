@@ -2,6 +2,14 @@
   gather_facts: no
   serial: 1
   tasks:
+    - name: change local dir owner
+      file:
+        path: "{{ deploy_src_path }}"
+        owner: "{{ owner }}"
+        group: "{{ group }}"
+        recurse: yes
+      delegate_to: 127.0.0.1
+      tags: local_change_owner
 
     - name:  sync  to the destination
       synchronize:
@@ -11,7 +19,7 @@
         rsync_opts: "{{ rsync_opts }}"
       tags: common
 
-    - name: change dir owner
+    - name: change dest dir owner
       file:
         path: "{{ deploy_dest_path }}"
         owner: "{{ owner }}"
@@ -19,7 +27,7 @@
         recurse: yes
       tags: dir_change_owner
 
-    - name: change file owner
+    - name: change dest file owner
       file:
         path: "{{ deploy_dest_path }}"
         owner: "{{ owner }}"

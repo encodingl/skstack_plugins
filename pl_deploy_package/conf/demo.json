@@ -9,7 +9,7 @@
 	             "owner": "nginx",
 	             "group": "nginx"},
 
-	"proj2":{"type":"tar",
+	"proj2":{"type":"local_owner",
 	             "repo_url":"http://nginx_host/proj2/",
 	             "proj_local_path":"/opt/tarsource/proj2/",
 	             "deploy_src_path":"/opt/tarsource/proj2/",

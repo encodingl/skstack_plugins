@@ -1,23 +1,27 @@
 {
 
-	"proj1":{"type":"git",
-	             "repo_url":"http://git_host/path/proj1.git",
-	             "proj_local_path":"/opt/gitsource/proj1",
-	             "deploy_src_path":"/opt/gitsource/proj1",
-	             "deploy_dest_path":"/opt/soft/",
-	             "rsync_opts":[],
-	             "delete_enable":"no",
-	             "owner": "nginx",
-	             "group": "nginx"},
+	"proj1":{
+		 "type":"git",
+		 "hosts": "nginx",
+         "repo_url":"http://git_host/path/proj1.git",
+         "proj_local_path":"/opt/gitsource/proj1",
+         "deploy_src_path":"/opt/gitsource/proj1",
+         "deploy_dest_path":"/opt/soft/",
+         "rsync_opts":[],
+         "delete_enable":"no",
+         "owner": "nginx",
+         "group": "nginx"},
 	
-	"proj2":{"type":"git",
-	             "repo_url":"http://git_host/path/proj2.git",
-	             "proj_local_path":"/opt/gitsource/proj2",
-	             "deploy_src_path":"/opt/gitsource/proj2/sub1/",
-	             "deploy_dest_path":"/opt/soft/proj2/",
-	             "rsync_opts":["--no-motd","--exclude=RedisConnect.php","--exclude=config","--exclude=runtime"],
-	             "delete_enable":"no",
-	             "owner": "nginx",
-	             "group": "nginx"}
+	"proj2":{
+		 "type":"git",
+		 "hosts": "none",
+         "repo_url":"http://git_host/path/proj2.git",
+         "proj_local_path":"/opt/gitsource/proj2",
+         "deploy_src_path":"/opt/gitsource/proj2/sub1/",
+         "deploy_dest_path":"/opt/soft/proj2/",
+         "rsync_opts":["--no-motd","--exclude=RedisConnect.php","--exclude=config","--exclude=runtime"],
+         "delete_enable":"no",
+         "owner": "nginx",
+         "group": "nginx"}
 
 }

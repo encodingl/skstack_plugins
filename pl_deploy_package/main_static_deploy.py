@@ -86,18 +86,21 @@ def main(argv):
     log_path = load_pub_json_conf(env, "log_path")
     log_file = log_path + "pl_deploy_package.log"
    
+    proj_type = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["type"]
     deploy_src_path = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["deploy_src_path"]
     rsync_opts = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["rsync_opts"]
     deploy_dest_path = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["deploy_dest_path"]
     delete_enable = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["delete_enable"]
     owner = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["owner"]
     group = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["group"]
-
-
-    if deploy_src_path.endswith('/'):
-        change_owner_tag = "dir_change_owner"
-    else:
-        change_owner_tag = "file_change_owner"
+    if proj_type == "local_owner":
+        change_owner_tag = "local_change_owner"
+    
+    else: 
+        if deploy_src_path.endswith('/'):
+            change_owner_tag = "dir_change_owner"
+        else:
+            change_owner_tag = "file_change_owner"
 
     
     os.chdir(CONFIG_BASE_DIR)
