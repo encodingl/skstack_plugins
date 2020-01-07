@@ -38,11 +38,9 @@ def main(argv):
     proj_type = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["type"]
     repo_url = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["repo_url"]
     proj_local_path = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["proj_local_path"]
-    if proj_type == "tar":
-        version_id = options.file
-        get_repo_file(proj_type,repo_url,proj_local_path,version_id,log_file)
-    else:
-        pass
+    version_id = options.file
+    get_repo_file(proj_type,repo_url,proj_local_path,version_id,log_file)
+
 
 
 
