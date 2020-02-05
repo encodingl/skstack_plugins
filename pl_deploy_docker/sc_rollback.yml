@@ -3,27 +3,27 @@
   serial: "{{ serial }}"
   tasks:
 
-    - name:  Get the DockerAppId which is running. step:1/4
+    - name: step:1/4:Get the DockerAppId which is running. 
       shell: docker ps|egrep '{{ DockerApp }}[\ |:]'|awk '{print $1}'
       register: DockerAppId
       tags: always
-    - name:  Get the last exited DockerAppId . step:2/4
+    - name: step:2/4:Get the last exited DockerAppId . 
       shell: docker ps -a|egrep '{{ DockerApp }}(\ |:|-20)'|grep Exited|head -n 1|awk '{print $1}'
       register: ExitedDockerAppId
       tags: always
-    - name: Docker app stop. step:3/4
+    - name: step:3/4:Docker app stop. 
       command: docker stop "{{ DockerAppId.stdout }}"
       register: msg2
       failed_when: "'FAILED' in msg2.stderr"
       tags: always
-    - name: Docker app start. step:4/4
+    - name: step:4/4:Docker app start. 
       command: docker start "{{ ExitedDockerAppId.stdout }}"
       tags: auto
-    - name: Docker app start. step:4/4
+    - name: step:4/4:Docker app start. 
       command: docker start "{{ DockerName }}"
       tags: manual
 
-    - name: LoopEurekaHealthCheck until successful, max time(2min) . step:healthcheck
+    - name: step:healthcheck:LoopEurekaHealthCheck until successful, max time(2min),please wait patiently .....
       script: sc_eureka_health_check.sh "{{ EurekaUrl }}" "{{ AppSpringName }}"
       tags: eureka
 

@@ -2,18 +2,18 @@
   gather_facts: no
   serial: 1
   tasks:
-    - name:  Get the DockerAppId which is running. step:1/3
+    - name:  step:1/3:Get the DockerAppId which is running. 
       shell: docker ps|egrep '{{ DockerApp }}(\ |:|-20)'|awk '{print $1}'
       register: DockerAppId
-    - name: Docker app stop. step:2/3
+    - name: step:2/3:Docker app stop. 
       command: docker stop "{{ DockerAppId.stdout }}"
       register: msg2
       failed_when: "'FAILED' in msg2.stderr"
-    - name: Docker app start. step:3/3
+    - name:  step:3/3:Docker app start.
       command: docker start "{{ DockerAppId.stdout }}"
 
 
-    - name: LoopEurekaHealthCheck until successful, max time(2min) . step:healthcheck
+    - name: step:healthcheck:LoopEurekaHealthCheck until successful, max time(2min) ,please wait patiently ...... 
       script: sc_eureka_health_check.sh "{{ EurekaUrl }}" "{{ AppSpringName }}"
       tags: eureka
 
