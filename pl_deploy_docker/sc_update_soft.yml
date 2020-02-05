@@ -6,7 +6,7 @@
       shell: curl -s "{{ EurekaUrl }}" |grep `hostname`:"{{ AppSpringName }}:" |awk -F / '{print $3}'
       register: AppInstance
     - name: Step:2/8:Get the DockerAppId which is running. 
-      shell: docker ps|egrep '{{ DockerApp }}-20'|awk '{print $1}'
+      shell: docker ps|egrep '{{ DockerApp }}(\ |:|-20)'|awk '{print $1}'
       register: DockerAppId
     - name: Step:3/8:Download docker image.
       command: docker pull "{{ DockerImageURL }}{{ DockerApp }}:{{ DockerImageTag }}"

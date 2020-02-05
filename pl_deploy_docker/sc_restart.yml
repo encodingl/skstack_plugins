@@ -3,7 +3,7 @@
   serial: 1
   tasks:
     - name:  Get the DockerAppId which is running. step:1/3
-      shell: docker ps|egrep '{{ DockerApp }}-20'|awk '{print $1}'
+      shell: docker ps|egrep '{{ DockerApp }}(\ |:|-20)'|awk '{print $1}'
       register: DockerAppId
     - name: Docker app stop. step:2/3
       command: docker stop "{{ DockerAppId.stdout }}"

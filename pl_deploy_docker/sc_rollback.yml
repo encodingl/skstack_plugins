@@ -8,7 +8,7 @@
       register: DockerAppId
       tags: always
     - name:  Get the last exited DockerAppId . step:2/4
-      shell: docker ps -a|egrep '{{ DockerApp }}-20'|grep Exited|head -n 1|awk '{print $1}'
+      shell: docker ps -a|egrep '{{ DockerApp }}(\ |:|-20)'|grep Exited|head -n 1|awk '{print $1}'
       register: ExitedDockerAppId
       tags: always
     - name: Docker app stop. step:3/4
