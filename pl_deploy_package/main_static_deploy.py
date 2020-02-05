@@ -20,8 +20,8 @@ from lib_pub.logger import sklog_original
 # Part4:Define the script argument 
 def parseOption(argv):
     parser = ArgumentParser(description="version 2.0.0")
-    parser.add_argument("-p", "--proj-git", dest="proj", metavar="[git_project_name]",
-                        help="the static git project name you want to depoly")
+    parser.add_argument("-p", "--project-name", dest="proj", metavar="[proj1|proj2]",
+                        help="the  project name you want to depoly")
     parser.add_argument("-e", "--environment", dest="env", metavar="[prod|stage|dev]",
                       help="the environment you need deploy ")
     parser.add_argument("-a", "--ansible-hosts", dest="hosts", metavar="[ansible-hosts]",default="none",

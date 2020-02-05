@@ -3,7 +3,7 @@
   serial: 1
   tasks:
     - name: Step:1/4:Get the DockerAppId which is running.
-      shell: docker ps|egrep '{{ DockerApp }}[\ |:]'|awk '{print $1}'
+      shell: docker ps|egrep '{{ DockerApp }}-20'|awk '{print $1}'
       register: DockerAppId
     - name: Step:2/4:Download docker image.
       command: docker pull "{{ DockerImageURL }}{{ DockerApp }}:{{ DockerImageTag }}"

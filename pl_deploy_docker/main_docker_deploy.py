@@ -72,7 +72,7 @@ def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_u
             ansible_cmd = "ansible-playbook sc_rollback.yml --skip-tags eureka,manual -v  -e \"hosts=%s serial=1 DockerApp=%s   WaitTimes=%s EurekaUrl=%s AppSpringName=%s\" " % \
                           (hosts, proj, wait_times, eureka_url, app_spring_name)
         elif exec_mode == "inquiry":
-            ansible_cmd = "ansible %s -m shell -a \"docker ps -a|egrep '%s[\ |:]|NAMES' \" " % \
+            ansible_cmd = "ansible %s -m shell -a \"docker ps -a|grep '%s-20' \" " % \
                           (hosts, proj)
         elif exec_mode == "update_hard":
             ansible_cmd = "ansible-playbook sc_update_hard.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s\" " % \
@@ -92,7 +92,7 @@ def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_u
             ansible_cmd = "ansible-playbook sc_rollback.yml --skip-tags manual -v  -e \"hosts=%s DockerApp=%s  serial=1 WaitTimes=%s EurekaUrl=%s AppSpringName=%s\" " % \
                           (hosts, proj, wait_times, eureka_url, app_spring_name)
         elif exec_mode == "inquiry":
-            ansible_cmd = "ansible %s -m shell -a \"docker ps -a|egrep '%s[\ |:]|NAMES' \" " % \
+            ansible_cmd = "ansible %s -m shell -a \"docker ps -a|grep '%s-20' \" " % \
                           (hosts, proj)
         elif exec_mode == "update_hard":
             ansible_cmd = "ansible-playbook sc_update_hard.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s\" " % \
