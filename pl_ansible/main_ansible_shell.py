@@ -40,22 +40,25 @@ def ansible_cmd_func(hosts,forks,cmd,log_file):
     try:        
         pcmd = Popen(ansible_cmd, stdout=PIPE, stderr=STDOUT, shell=True) 
         while True: 
-            line = pcmd.stdout.readline().strip() 
-            if line:
-                line = str(line,encoding='utf-8')
-                sklog.info(line)
-            else:
-                break   
+            for line in iter(pcmd.stdout.readline,b''):
+                line=line.decode('utf-8').strip('\n')
+                if line:
+                    sklog.info(line)
+                else:
+                    break
+            if pcmd.poll() is not None:
+                break
         
     except:
         exinfo=sys.exc_info()
         sklog.error(exinfo)
     
-    retcode = pcmd.wait()
-    if retcode == 0:
-        sklog.info("%s INFO the ansible shell task finished" % datetime.datetime.now())
-    else:
-        raise Exception("Command failed")
+    finally:
+        retcode = pcmd.wait()
+        if retcode == 0:
+            pass
+        else:
+            raise Exception("task failed,please check pl_ansible_shell.log for details")
     
 # Part6:Define the main function,accept parameters passed to the task function to executes
 def main(argv):
@@ -65,7 +68,7 @@ def main(argv):
     env = options.env
     forks = load_pri_json_conf(CONFIG_BASE_DIR,env, "forks")
     log_path = load_pub_json_conf(env, "log_path")
-    log_file = log_path + "ansible_shell.log"
+    log_file = log_path + "pl_ansible_shell.log"
     ansible_cmd_func(hosts,forks,cmd,log_file)
  
     
