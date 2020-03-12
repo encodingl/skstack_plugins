@@ -52,6 +52,7 @@ def main(argv):
 
     if proj_type == "git":
         commit_str = options.id
+      
         pattern = re.compile(r'\w+')
         m = pattern.match(commit_str)
         commit_id = m.group(0)
