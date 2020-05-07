@@ -4,6 +4,7 @@
 import os
 import json
 import sys
+import re
 
 
 
@@ -53,7 +54,8 @@ def load_pri_json_conf_keys(CONFIG_BASE_DIR,env,keyword):
             if keyword == "None":   
                 return list_keys
             else:
-                return [key for key in list_keys if keyword in key]
+#                 return [key for key in list_keys if keyword in key]
+                return [key for key in list_keys if re.match(keyword, key) != None]
         
     else:
         print(("%s is not exist" % abs_config_file))
