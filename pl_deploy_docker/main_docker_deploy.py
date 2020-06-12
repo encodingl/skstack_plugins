@@ -52,7 +52,7 @@ def parseOption(argv):
     parser.add_argument("-w", "--WaitTimes", dest="times", help="input securyty wait times for rolling update default=60s",default="60s",
                       metavar="[3s|1m|...]")
     parser.add_argument("-m", "--ExecMode", dest="mode", help="input the execution mode you need",
-                      metavar="[update|restart|inquiry|rollback|update_hard]")
+                      metavar="[update|restart|inquiry|rollback|update_hard|stop_soft]")
 
     args = parser.parse_args()
     if not len(argv): parser.print_help();sys.exit(1) 
@@ -77,6 +77,9 @@ def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_u
         elif exec_mode == "update_hard":
             ansible_cmd = "ansible-playbook sc_update_hard.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s\" " % \
                           (hosts, proj, tag, docker_run, docker_image_url)
+        elif exec_mode == "stop_soft":
+            ansible_cmd = "ansible-playbook sc_stop_hard.yml -v -e \"hosts=%s DockerApp=%s \" " % \
+                  (hosts,proj,docker_run,)
         else:
             
             sklog.error("please choose the ExecMode ")
@@ -97,6 +100,9 @@ def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_u
         elif exec_mode == "update_hard":
             ansible_cmd = "ansible-playbook sc_update_hard.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s\" " % \
                           (hosts, proj, tag, docker_run, docker_image_url)
+        elif exec_mode == "stop_soft":
+            ansible_cmd = "ansible-playbook sc_stop_soft.yml -v -e \"hosts=%s DockerApp=%s  WaitTimes=%s EurekaUrl=%s AppSpringName=%s\" " % \
+                  (hosts,proj,wait_times,eureka_url,app_spring_name)
         else:
             sklog.error("please choose the Exec Mode ")
             exit(1)
