@@ -7,6 +7,7 @@ import sys
 import os
 from subprocess import Popen, PIPE, STDOUT
 import datetime
+
 # Part2:load skstack_plugins root path for load lib_pub
 CONFIG_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -39,8 +40,8 @@ def ansible_playbook_func(playbook_file,playbook_path,hosts,serial,log_file):
         "hosts": hosts,
         "serial": serial
         }
-    # print(playbook_path, playbook_file)
-    ansible_cmd = "/usr/local/bin/ansible-playbook %s/%s -e '%s'" % (playbook_path, playbook_file, vars_dic)
+
+    ansible_cmd = "ansible-playbook %s/%s -e '%s'" % (playbook_path, playbook_file, vars_dic)
     try:        
         pcmd = Popen(ansible_cmd, stdout=PIPE, stderr=STDOUT, shell=True)
         while True:
