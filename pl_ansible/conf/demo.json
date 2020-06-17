@@ -2,9 +2,9 @@
     "ansible_hosts_file":"/etc/ansible/hosts",
     "forks":"5",
 
-//    playbook_path后面不加“/”
+//    playbook_path后面要加“/”
     "pingtest": {
-		"playbook_path": "/Users/aomine/Documents/workspace/github/skstack_plugins/pl_ansible/playbook",
+		"playbook_path": "/Users/aomine/Documents/workspace/github/skstack_plugins/pl_ansible/playbook/",
 		"hosts": "node",
 		"serial": "1"
 	}

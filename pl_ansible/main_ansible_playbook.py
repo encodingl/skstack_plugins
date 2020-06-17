@@ -41,7 +41,7 @@ def ansible_playbook_func(playbook_file,playbook_path,hosts,serial,log_file):
         "serial": serial
         }
 
-    ansible_cmd = "ansible-playbook %s/%s -e '%s'" % (playbook_path, playbook_file, vars_dic)
+    ansible_cmd = "ansible-playbook %s%s -e '%s'" % (playbook_path, playbook_file, vars_dic)
     try:        
         pcmd = Popen(ansible_cmd, stdout=PIPE, stderr=STDOUT, shell=True)
         while True:
