@@ -26,6 +26,7 @@ from argparse import ArgumentParser
 import sys,os,time
 from subprocess import Popen, PIPE, STDOUT
 import datetime
+import pytz
 
 # Part2:load skstack_plugins root path 
 CONFIG_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -151,7 +152,7 @@ def main(argv):
     options = parseOption(argv)
     env = options.env
     log_path = load_pub_json_conf(env, "log_path")
-    log_file = log_path + "pl_deploy_docker.log"
+    
     proj = options.proj
     tag = options.tag
     wait_times = options.times
@@ -177,7 +178,8 @@ def main(argv):
     docker_run_name = "%s-%s" % (proj,docker_run_time)
     docker_run_arg = "--name %s %s" % (docker_run_name,docker_run_arg)
     docker_run = "docker run  %s %s %s" % (docker_run_arg,docker_run_image,docker_run_cmd)
-    task_id = datetime.datetime.now().strftime('%Y%m%d.%H%M%S.%f')
+    task_id = datetime.datetime.now(pytz.timezone('Asia/Shanghai')).strftime('%Y%m%d.%H%M%S.%f')
+    log_file = log_path + "pl_deploy_docker.log." + task_id
     os.chdir(CONFIG_BASE_DIR)
     docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_url,app_spring_name,exec_mode,log_file,check_time,task_id)
 
