@@ -2,9 +2,11 @@
 # this script have been used for sprintboot service status check
 EurekaUrl=$1
 AppSpringName=$2
+MaxCheckTime=$3
 #waiting for App startup
 sleep 10s
-for(( i=1; i<=24;i++ ))
+checktimes=$[MaxCheckTime/5]
+for(( i=1; i<=$checktimes;i++ ))
     do
         hostname=`hostname`
         AppInstance=`curl -s $EurekaUrl |grep $hostname:$AppSpringName:|awk -F / '{print $3}'`

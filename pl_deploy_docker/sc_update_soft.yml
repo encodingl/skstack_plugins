@@ -20,8 +20,8 @@
       failed_when: "'FAILED' in msg2.stderr"  
     - name: Step:7/8:Docker app run.
       command: "{{ DockerRun }}"
-    - name: Step:8/8:LoopHealthCheck until successful, max time(2min).
-      script: sc_eureka_health_check.sh "{{ EurekaUrl }}" "{{ AppSpringName }}"
+    - name: Step:8/8:LoopHealthCheck until successful, the default max time is 2min.
+      script: sc_eureka_health_check.sh "{{ EurekaUrl }}" "{{ AppSpringName }}" "{{ MaxCheckTime }}"
 
 
 
