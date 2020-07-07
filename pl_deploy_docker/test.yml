@@ -1,0 +1,6 @@
+- hosts: "{{ hosts }}"
+  gather_facts: no
+  serial: 1
+  tasks:
+    - name: Step:1/8:Get the AppInstance ID(e.host:port) from eureka taskid:"{{ taskid }}". 
+      shell: echo "{{ taskid }}" 

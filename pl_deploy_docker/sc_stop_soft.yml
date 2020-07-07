@@ -2,17 +2,17 @@
   gather_facts: no
   serial: 1
   tasks:
-    - name: Step:1/5:Get the AppInstance ID(e.host:port) from eureka. 
+    - name: Step:1/5:Get the AppInstance ID(e.host:port) from eureka. TaskId:"{{ TaskId }}".
       shell: curl -s "{{ EurekaUrl }}" |grep `hostname`:"{{ AppSpringName }}:" |awk -F / '{print $3}'
       register: AppInstance
-    - name: Step:2/5:Get the DockerAppId which is running. 
+    - name: Step:2/5:Get the DockerAppId which is running. TaskId:"{{ TaskId }}".
       shell: docker ps|egrep '{{ DockerApp }}(\ |:|-20)'|awk '{print $1}'
       register: DockerAppId
-    - name: Step:3/5:Deregister service.
+    - name: Step:3/5:Deregister service.TaskId:"{{ TaskId }}".
       shell: curl  -s --max-time 3 http://"{{ AppInstance.stdout }}"/health/deregister
-    - name: Step:4/5:Securyty wait times for eureka server&client cache refresh (default 60s).
+    - name: Step:4/5:Securyty wait times for eureka server&client cache refresh (default 60s).TaskId:"{{ TaskId }}".
       command: sleep "{{ WaitTimes }}"
-    - name: Step:5/5:Docker stop app. 
+    - name: Step:5/5:Docker stop app. TaskId:"{{ TaskId }}".
       command: docker stop "{{ DockerAppId.stdout }}"
       register: msg2
       failed_when: "'FAILED' in msg2.stderr"  
