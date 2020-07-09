@@ -25,6 +25,8 @@ after_deploy:
 from argparse import ArgumentParser
 import sys,os,time
 from subprocess import Popen, PIPE, STDOUT
+import datetime
+import pytz
 
 # Part2:load skstack_plugins root path 
 CONFIG_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -53,6 +55,8 @@ def parseOption(argv):
                       metavar="[3s|1m|...]")
     parser.add_argument("-m", "--ExecMode", dest="mode", help="input the execution mode you need",
                       metavar="[update|restart|inquiry|rollback|update_hard|stop_soft]")
+    parser.add_argument("-c", "--CheckTime", dest="checktime", help="input the max check time(Unit:seconds) you need,the default is 120",default=120,
+                      metavar="[10|60]")
 
     args = parser.parse_args()
     if not len(argv): parser.print_help();sys.exit(1) 
@@ -60,26 +64,26 @@ def parseOption(argv):
 
 
 
-def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_url,app_spring_name,exec_mode,log_file):
+def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_url,app_spring_name,exec_mode,log_file,check_time,task_id):
     sklog = sklog_original(log_file)
     if app_spring_name == "null":
         if exec_mode == "update":
-            ansible_cmd = "ansible-playbook sc_update_hard.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s  AppSpringName=%s\" " % \
-                      (hosts, proj, tag, docker_run, docker_image_url, app_spring_name)
+            ansible_cmd = "ansible-playbook sc_update_hard.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s  AppSpringName=%s TaskId=%s\" " % \
+                      (hosts, proj, tag, docker_run, docker_image_url, app_spring_name,task_id)
         elif exec_mode == "restart":
-            ansible_cmd = "ansible-playbook sc_restart.yml --skip-tags 'eureka' -v -e \"hosts=%s DockerApp=%s\" " % (hosts, proj)
+            ansible_cmd = "ansible-playbook sc_restart.yml --skip-tags 'eureka' -v -e \"hosts=%s DockerApp=%s TaskId=%s\" " % (hosts, proj,task_id)
         elif exec_mode == "rollback":
-            ansible_cmd = "ansible-playbook sc_rollback.yml --skip-tags eureka,manual -v  -e \"hosts=%s serial=1 DockerApp=%s   WaitTimes=%s EurekaUrl=%s AppSpringName=%s\" " % \
-                          (hosts, proj, wait_times, eureka_url, app_spring_name)
+            ansible_cmd = "ansible-playbook sc_rollback.yml --skip-tags eureka,manual -v  -e \"hosts=%s serial=1 DockerApp=%s   WaitTimes=%s EurekaUrl=%s AppSpringName=%s TaskId=%s\" " % \
+                          (hosts, proj, wait_times, eureka_url, app_spring_name,task_id)
         elif exec_mode == "inquiry":
             ansible_cmd = "ansible %s -m shell -a \"docker ps -a|egrep '%s(\ |:|-20)|NAMES' \" " % \
                           (hosts, proj)
         elif exec_mode == "update_hard":
-            ansible_cmd = "ansible-playbook sc_update_hard.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s\" " % \
-                          (hosts, proj, tag, docker_run, docker_image_url)
+            ansible_cmd = "ansible-playbook sc_update_hard.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s TaskId=%s\" " % \
+                          (hosts, proj, tag, docker_run, docker_image_url,task_id)
         elif exec_mode == "stop_soft":
-            ansible_cmd = "ansible-playbook sc_stop_hard.yml -v -e \"hosts=%s DockerApp=%s \" " % \
-                  (hosts,proj,docker_run,)
+            ansible_cmd = "ansible-playbook sc_stop_hard.yml -v -e \"hosts=%s DockerApp=%s TaskId=%s\" " % \
+                          (hosts,proj,docker_run,task_id)
         else:
             
             sklog.error("please choose the ExecMode ")
@@ -87,22 +91,23 @@ def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_u
          
     else:
         if exec_mode == "update":
-            ansible_cmd = "ansible-playbook sc_update_soft.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s WaitTimes=%s EurekaUrl=%s AppSpringName=%s\" " % \
-                  (hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_url,app_spring_name)
+            ansible_cmd = "ansible-playbook sc_update_soft.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s WaitTimes=%s EurekaUrl=%s AppSpringName=%s MaxCheckTime=%s TaskId=%s\" " % \
+                          (hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_url,app_spring_name,check_time,task_id)
         elif exec_mode == "restart":
-            ansible_cmd = "ansible-playbook sc_restart.yml -v -e \"hosts=%s DockerApp=%s WaitTimes=%s EurekaUrl=%s  AppSpringName=%s\" " % (hosts, proj,wait_times,eureka_url,app_spring_name)
+            ansible_cmd = "ansible-playbook sc_restart.yml -v -e \"hosts=%s DockerApp=%s WaitTimes=%s EurekaUrl=%s  AppSpringName=%s MaxCheckTime=%s TaskId=%s\" " % \
+                          (hosts, proj,wait_times,eureka_url,app_spring_name,check_time,task_id)
         elif exec_mode == "rollback":
-            ansible_cmd = "ansible-playbook sc_rollback.yml --skip-tags manual -v  -e \"hosts=%s DockerApp=%s  serial=1 WaitTimes=%s EurekaUrl=%s AppSpringName=%s\" " % \
-                          (hosts, proj, wait_times, eureka_url, app_spring_name)
+            ansible_cmd = "ansible-playbook sc_rollback.yml --skip-tags manual -v  -e \"hosts=%s DockerApp=%s  serial=1 WaitTimes=%s EurekaUrl=%s AppSpringName=%s MaxCheckTime=%s TaskId=%s\" " % \
+                          (hosts, proj, wait_times, eureka_url, app_spring_name,check_time,task_id)
         elif exec_mode == "inquiry":
             ansible_cmd = "ansible %s -m shell -a \"docker ps -a|egrep '%s(\ |:|-20)|NAMES' \" " % \
                           (hosts, proj)
         elif exec_mode == "update_hard":
-            ansible_cmd = "ansible-playbook sc_update_hard.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s\" " % \
-                          (hosts, proj, tag, docker_run, docker_image_url)
+            ansible_cmd = "ansible-playbook sc_update_hard.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s TaskId=%s\" " % \
+                          (hosts, proj, tag, docker_run, docker_image_url,task_id)
         elif exec_mode == "stop_soft":
-            ansible_cmd = "ansible-playbook sc_stop_soft.yml -v -e \"hosts=%s DockerApp=%s  WaitTimes=%s EurekaUrl=%s AppSpringName=%s\" " % \
-                  (hosts,proj,wait_times,eureka_url,app_spring_name)
+            ansible_cmd = "ansible-playbook sc_stop_soft.yml -v -e \"hosts=%s DockerApp=%s  WaitTimes=%s EurekaUrl=%s AppSpringName=%s TaskId=%s\" " % \
+                          (hosts,proj,wait_times,eureka_url,app_spring_name,task_id)
         else:
             sklog.error("please choose the Exec Mode ")
             exit(1)
@@ -139,17 +144,20 @@ def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_u
         if retcode == 0:
             pass
         else:
-            raise Exception("task failed,please check pl_deploy_docker.log for details")
+            print("ERROR:the task failed,please check pl_deploy_docker.log for details")
+            sys.exit(1)
+            
 
 def main(argv):
     options = parseOption(argv)
     env = options.env
     log_path = load_pub_json_conf(env, "log_path")
-    log_file = log_path + "pl_deploy_docker.log"
+    
     proj = options.proj
     tag = options.tag
     wait_times = options.times
     exec_mode = options.mode
+    check_time = options.checktime
   
     opt_hosts = options.hosts
     json_hosts = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["hosts"]
@@ -170,8 +178,10 @@ def main(argv):
     docker_run_name = "%s-%s" % (proj,docker_run_time)
     docker_run_arg = "--name %s %s" % (docker_run_name,docker_run_arg)
     docker_run = "docker run  %s %s %s" % (docker_run_arg,docker_run_image,docker_run_cmd)
+    task_id = datetime.datetime.now(pytz.timezone('Asia/Shanghai')).strftime('%Y%m%d.%H%M%S.%f')
+    log_file = log_path + "pl_deploy_docker.log." + task_id
     os.chdir(CONFIG_BASE_DIR)
-    docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_url,app_spring_name,exec_mode,log_file)
+    docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_url,app_spring_name,exec_mode,log_file,check_time,task_id)
 
 
 if __name__ == "__main__":

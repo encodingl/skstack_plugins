@@ -2,16 +2,16 @@
   gather_facts: no
   serial: 1
   tasks:
-    - name: Step:1/4:Get the DockerAppId which is running.
+    - name: Step:1/4:Get the DockerAppId which is running.TaskId:"{{ TaskId }}".
       shell: docker ps|egrep '{{ DockerApp }}(\ |:|-20)'|awk '{print $1}'
       register: DockerAppId
-    - name: Step:2/4:Download docker image.
+    - name: Step:2/4:Download docker image.TaskId:"{{ TaskId }}".
       command: docker pull "{{ DockerImageURL }}{{ DockerApp }}:{{ DockerImageTag }}"
-    - name: Step:3/4:Docker app stop.
+    - name: Step:3/4:Docker app stop.TaskId:"{{ TaskId }}".
       command: docker stop "{{ DockerAppId.stdout }}"
       register: msg2
       failed_when: "'FAILED' in msg2.stderr"  
-    - name: Step:4/4:Docker app run.
+    - name: Step:4/4:Docker app run.TaskId:"{{ TaskId }}".
       command: "{{ DockerRun }}"
 
 

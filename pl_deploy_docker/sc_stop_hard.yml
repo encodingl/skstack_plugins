@@ -3,10 +3,10 @@
   serial: 1
   tasks:
 
-    - name: Step:1/2:Get the DockerAppId which is running. 
+    - name: Step:1/2:Get the DockerAppId which is running. TaskId:"{{ TaskId }}".
       shell: docker ps|egrep '{{ DockerApp }}(\ |:|-20)'|awk '{print $1}'
       register: DockerAppId
-    - name: Step:2/2:Docker stop app. 
+    - name: Step:2/2:Docker stop app. TaskId:"{{ TaskId }}".
       command: docker stop "{{ DockerAppId.stdout }}"
       register: msg2
       failed_when: "'FAILED' in msg2.stderr"  
