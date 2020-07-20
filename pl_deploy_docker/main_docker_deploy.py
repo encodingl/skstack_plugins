@@ -57,7 +57,7 @@ def parseOption(argv):
                       metavar="[update|restart|inquiry|rollback|update_hard|stop_soft]")
     parser.add_argument("-c", "--CheckTime", dest="checktime", help="input the max check time(Unit:seconds) you need,the default is 120",default=120,
                       metavar="[10|60]")
-    parser.add_argument("-tnc", "--task-name-created", dest="task_name_created", metavar="[proj01.20200718.213030|proj.20200718.213030|...]",
+    parser.add_argument("-tnc", "--task-name-created", dest="task_name_created", metavar="[proj01.20200718.213030|proj.20200718.213030|...]", default="none",
                         help="the docker project you want to depoly")
 
     args = parser.parse_args()
