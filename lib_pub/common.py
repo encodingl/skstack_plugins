@@ -44,7 +44,7 @@ def load_pub_json_conf(env,key):
         sys.exit(1)
         
 
-def load_pri_json_conf_keys(CONFIG_BASE_DIR,env,keyword):
+def load_pri_json_conf_keys(CONFIG_BASE_DIR,env,keyword,exclude):
     config_file = env+"_conf.json"
     abs_config_file = os.path.join(CONFIG_BASE_DIR, 'conf', config_file)
     if os.path.exists(abs_config_file):
@@ -54,9 +54,8 @@ def load_pri_json_conf_keys(CONFIG_BASE_DIR,env,keyword):
             if keyword == "None":   
                 return list_keys
             else:
-#                 return [key for key in list_keys if keyword in key]
-                return [key for key in list_keys if re.match(keyword, key) != None]
-        
+                return [key for key in list_keys if re.match(keyword, key) != None and exclude not in key]
+
     else:
         print(("%s is not exist" % abs_config_file))
         sys.exit(1)
