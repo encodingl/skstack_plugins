@@ -54,7 +54,7 @@ def parseOption(argv):
     parser.add_argument("-w", "--WaitTimes", dest="times", help="input securyty wait times for rolling update default=60s",default="60s",
                       metavar="[3s|1m|...]")
     parser.add_argument("-m", "--ExecMode", dest="mode", help="input the execution mode you need",
-                      metavar="[update|update_hard|restart_soft|restart_hard|inquiry|rollback|stop_soft]")
+                      metavar="[update|update2|update_hard|restart_soft|restart_hard|inquiry|rollback|stop_soft]")
     parser.add_argument("-c", "--CheckTime", dest="checktime", help="input the max check time(Unit:seconds) you need,the default is 120",default=120,
                       metavar="[10|60]")
     parser.add_argument("-tnc", "--task-name-created", dest="task_name_created", metavar="[proj01.20200718.213030|proj.20200718.213030|...]", default="none",
@@ -88,6 +88,9 @@ def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_u
         elif exec_mode == "stop_soft":
             ansible_cmd = "ansible-playbook sc_stop_hard.yml -v -e \"hosts=%s DockerApp=%s TaskId=%s\" " % \
                           (hosts,proj,docker_run,task_id)
+        elif exec_mode == "update2":
+            ansible_cmd = "ansible-playbook sc_update_hard.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s TaskId=%s\" " % \
+                          (hosts, proj, tag, docker_run, docker_image_url, task_id)
         else:
 
             sklog.error("please choose the ExecMode ")
@@ -115,6 +118,9 @@ def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_u
         elif exec_mode == "stop_soft":
             ansible_cmd = "ansible-playbook sc_stop_soft.yml -v -e \"hosts=%s DockerApp=%s  WaitTimes=%s EurekaUrl=%s AppSpringName=%s TaskId=%s\" " % \
                           (hosts,proj,wait_times,eureka_url,app_spring_name,task_id)
+        elif exec_mode == "update2":
+            ansible_cmd = "ansible-playbook sc_update_soft2.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s WaitTimes=%s EurekaUrl=%s AppSpringName=%s MaxCheckTime=%s TaskId=%s\" " % \
+                          (hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_url,app_spring_name,check_time,task_id)
         else:
             sklog.error("please choose the Exec Mode ")
             exit(1)
