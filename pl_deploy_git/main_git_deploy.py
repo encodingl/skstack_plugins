@@ -29,7 +29,9 @@ def parseOption(argv):
                         help="the static git project name you want to depoly")
     parser.add_argument("-a", "--ansible-hosts", dest="hosts", metavar="[ansible-hosts]",default="none",
                         help="the destination hosts you want to depoly")
-    
+    parser.add_argument("-s", "--serial", dest="serial",
+                        metavar="[1|2|3|...]", default="1",
+                        help="ansible playbook yml serial")
     
  
     args = parser.parse_args()
@@ -37,7 +39,7 @@ def parseOption(argv):
     return args
 
 # Part5:Define the task function
-def static_deploy(change_owner_tag,hosts,deploy_src_path,deploy_dest_path,delete_enable,owner,group,log_file,rsync_opts):
+def static_deploy(change_owner_tag,hosts,deploy_src_path,deploy_dest_path,delete_enable,owner,group,log_file,rsync_opts,serial):
     sklog = sklog_original(log_file)
     sklog.info("start deploy static files")
     vars_dic = {
@@ -47,7 +49,8 @@ def static_deploy(change_owner_tag,hosts,deploy_src_path,deploy_dest_path,delete
         "delete_enable":delete_enable,
         "owner":owner,
         "group":group,
-        "rsync_opts":rsync_opts
+        "rsync_opts":rsync_opts,
+        "Serial": serial
         }
     ansible_cmd = "ansible-playbook sc_static_sync.yml --tags common,%s -e '%s' " % (change_owner_tag,vars_dic)
     try:
@@ -80,8 +83,9 @@ def main(argv):
     env = options.env
     proj = options.proj
     opt_hosts = options.hosts
+    serial = options.serial
     json_hosts = load_pri_json_conf(CONFIG_BASE_DIR,env, proj)["hosts"]
-    if opt_hosts != "none" :
+    if opt_hosts != "none":
         hosts = opt_hosts
     elif opt_hosts == "none" and json_hosts != "none":
         hosts = json_hosts
@@ -105,7 +109,7 @@ def main(argv):
 
     
     os.chdir(CONFIG_BASE_DIR)
-    static_deploy(change_owner_tag,hosts, deploy_src_path, deploy_dest_path, delete_enable,owner,group,log_file,rsync_opts)
+    static_deploy(change_owner_tag,hosts, deploy_src_path, deploy_dest_path, delete_enable,owner,group,log_file,rsync_opts,serial)
 
 
 

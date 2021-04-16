@@ -1,6 +1,6 @@
 - hosts: "{{ hosts }}"
   gather_facts: no
-  serial: 1
+  serial: "{{ Serial }}"
   tasks:
     - name: Step:1/10:Download docker image.TaskId:"{{ TaskId }}".
       command: docker pull "{{ DockerImageURL }}{{ DockerApp }}:{{ DockerImageTag }}"

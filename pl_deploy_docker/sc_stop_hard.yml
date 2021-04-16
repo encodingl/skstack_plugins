@@ -1,6 +1,6 @@
 - hosts: "{{ hosts }}"
   gather_facts: no
-  serial: 1
+  serial: "{{ Serial }}"
   tasks:
 
     - name: Step:1/2:Get the DockerAppId which is running. TaskId:"{{ TaskId }}".
