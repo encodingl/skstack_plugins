@@ -1,7 +1,7 @@
 - hosts: "{{ hosts }}"
   gather_facts: no
   become: yes
-  serial: 1
+  serial: "{{ Serial }}"
   tasks:
 
     - name:  sync  to the destination

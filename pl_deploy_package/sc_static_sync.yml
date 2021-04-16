@@ -1,6 +1,6 @@
 - hosts: "{{ hosts }}"
   gather_facts: no
-  serial: 1
+  serial: "{{ Serial }}"
   tasks:
     - name: change local dir owner
       file:

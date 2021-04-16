@@ -1,6 +1,6 @@
 - hosts: "{{ hosts }}"
   gather_facts: no
-  serial: 1
+  serial: "{{ Serial }}"
   tasks:
     - name:  step:1/3:Get the DockerAppId which is running. TaskId:"{{ TaskId }}".
       shell: docker ps|egrep '{{ DockerApp }}(\ |:|-20)'|awk '{print $1}'
