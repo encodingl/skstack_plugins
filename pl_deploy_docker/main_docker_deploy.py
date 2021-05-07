@@ -94,8 +94,7 @@ def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_u
         elif exec_mode == "update2":
             ansible_cmd = "ansible-playbook sc_update_hard.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s TaskId=%s Serial=%s\" " % \
                           (hosts, proj, tag, docker_run, docker_image_url, task_id, serial)
-        elif exec_mode == "restart_soft2":
-            ansible_cmd = "ansible-playbook sc_restart_hard.yml --skip-tags 'eureka' -v -e \"hosts=%s DockerApp=%s TaskId=%s Serial=%s\" " % (hosts, proj, task_id, serial)
+
         else:
 
             sklog.error("please choose the ExecMode ")
@@ -126,9 +125,6 @@ def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_u
         elif exec_mode == "update2":
             ansible_cmd = "ansible-playbook sc_update_soft2.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s WaitTimes=%s EurekaUrl=%s AppSpringName=%s MaxCheckTime=%s TaskId=%s Serial=%s\" " % \
                           (hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_url,app_spring_name,check_time,task_id,serial)
-        elif exec_mode == "restart_soft2":
-            ansible_cmd = "ansible-playbook sc_restart_soft2.yml -v -e \"hosts=%s DockerApp=%s  WaitTimes=%s EurekaUrl=%s AppSpringName=%s MaxCheckTime=%s TaskId=%s Serial=%s\" " % \
-                          (hosts,proj,wait_times,eureka_url,app_spring_name,check_time,task_id,serial)
         else:
             sklog.error("please choose the Exec Mode ")
             exit(1)
