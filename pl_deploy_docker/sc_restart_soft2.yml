@@ -1,0 +1,25 @@
+- hosts: "{{ hosts }}"
+  gather_facts: no
+  serial: "{{ Serial }}"
+  tasks:
+    - name: Step:1/7:Get the DockerAppId which is running. TaskId:"{{ TaskId }}".
+      shell: docker ps|egrep '{{ DockerApp }}(\ |:|-20)'|awk '{print $1}'
+      register: DockerAppId
+    - name: Step:2/7:Get the AppInstance ID(e.host:port) from eureka. TaskId:"{{ TaskId }}".
+      shell: curl -s "{{ EurekaUrl }}" |grep `hostname`:"{{ AppSpringName }}:" |awk -F / '{print $3}'
+      register: AppInstance
+    - name: Step:3/7:Shutdown service.TaskId:"{{ TaskId }}".
+      shell: curl  -d '' http://"{{ AppInstance.stdout }}"/shutdown
+    - name: Step:4/7:Securyty wait times for shutdown finished (default 60s).TaskId:"{{ TaskId }}".
+      command: sleep "{{ WaitTimes }}"
+    - name: Step:5/7:Docker app stop. TaskId:"{{ TaskId }}".
+      command: docker stop "{{ DockerAppId.stdout }}"
+      register: msg2
+      failed_when: "'FAILED' in msg2.stderr"  
+    - name:  step:6/7:Docker app start.TaskId:"{{ TaskId }}".
+      command: docker start "{{ DockerAppId.stdout }}"
+    - name: Step:7/7:LoopHealthCheck until successful, the default max time is 2min.TaskId:"{{ TaskId }}".
+      script: sc_eureka_health_check.sh "{{ EurekaUrl }}" "{{ AppSpringName }}" "{{ MaxCheckTime }}"
+
+
+
