@@ -38,6 +38,8 @@ sys.path.append(BASE_DIR)
 from lib_pub.common import load_pri_json_conf,load_pub_json_conf
 from lib_pub.logger import sklog_original
 
+from pl_deploy_docker.lib_pri.docker_info import  docker_tag_format
+
 
 
 def parseOption(argv):
@@ -171,7 +173,7 @@ def main(argv):
     log_path = load_pub_json_conf(env, "log_path")
 
     proj = options.proj
-    tag = options.tag
+    tag = docker_tag_format(options.tag)
     wait_times = options.times
     exec_mode = options.mode
     check_time = options.checktime
