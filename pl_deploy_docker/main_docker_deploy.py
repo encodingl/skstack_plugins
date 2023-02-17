@@ -96,6 +96,9 @@ def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_u
         elif exec_mode == "update2":
             ansible_cmd = "ansible-playbook sc_update_hard.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s TaskId=%s Serial=%s\" " % \
                           (hosts, proj, tag, docker_run, docker_image_url, task_id, serial)
+        elif exec_mode == "update_hard_check":
+            ansible_cmd = "ansible-playbook sc_update_hard.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s TaskId=%s Serial=%s\" " % \
+                          (hosts, proj, tag, docker_run, docker_image_url, task_id, serial)                  
 
         else:
 
@@ -127,6 +130,9 @@ def docker_deploy(hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_u
         elif exec_mode == "update2":
             ansible_cmd = "ansible-playbook sc_update_soft2.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s WaitTimes=%s EurekaUrl=%s AppSpringName=%s MaxCheckTime=%s TaskId=%s Serial=%s\" " % \
                           (hosts,proj,tag,docker_run,docker_image_url,wait_times,eureka_url,app_spring_name,check_time,task_id,serial)
+        elif exec_mode == "update_hard_check":
+            ansible_cmd = "ansible-playbook sc_update_hard_check.yml -v -e \"hosts=%s DockerApp=%s DockerImageTag=%s DockerRun='%s' DockerImageURL=%s TaskId=%s Serial=%s EurekaUrl=%s AppSpringName=%s MaxCheckTime=%s \" " % \
+                          (hosts, proj, tag, docker_run, docker_image_url,task_id,serial,eureka_url,app_spring_name,check_time)                 
         else:
             sklog.error("please choose the Exec Mode ")
             exit(1)
