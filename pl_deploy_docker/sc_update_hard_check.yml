@@ -1,0 +1,20 @@
+- hosts: "{{ hosts }}"
+  gather_facts: no
+  serial: "{{ Serial }}"
+  tasks:
+    - name: Step:1/5:Get the DockerAppId which is running.TaskId:"{{ TaskId }}".
+      shell: docker ps|egrep '{{ DockerApp }}(\ |:|-20)'|awk '{print $1}'
+      register: DockerAppId
+    - name: Step:2/5:Download docker image.TaskId:"{{ TaskId }}".
+      command: docker pull "{{ DockerImageURL }}{{ DockerApp }}:{{ DockerImageTag }}"
+    - name: Step:3/5:Docker app stop.TaskId:"{{ TaskId }}".
+      command: docker stop "{{ DockerAppId.stdout }}"
+      register: msg2
+      failed_when: "'FAILED' in msg2.stderr"  
+    - name: Step:4/5:Docker app run.TaskId:"{{ TaskId }}".
+      command: "{{ DockerRun }}"
+    - name: Step:5/5:LoopHealthCheck until successful, the default max time is 2min.TaskId:"{{ TaskId }}".
+      script: sc_eureka_health_check.sh "{{ EurekaUrl }}" "{{ AppSpringName }}" "{{ MaxCheckTime }}"  
+
+
+
