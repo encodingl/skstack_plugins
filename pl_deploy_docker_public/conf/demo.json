@@ -1,0 +1,20 @@
+{
+
+	"demo1": {
+		"DockerImageURL": "registry.cn-hongkong.aliyuncs.com/namespace_demo/",
+		"hosts": "none",
+		"DockerRunArg": " -d -m 1000m -v /data/logs:/logs",
+		"DockerRunCmd": "",
+        "HealthCheckUrl": "null",
+		"ServicePort": "null"
+	},
+
+	"demo2": {
+		"DockerImageURL": "registry.cn-hongkong.aliyuncs.com/namespace_demo/",
+		"hosts": "none",
+		"DockerRunArg": "",
+		"DockerRunCmd": "java  -jar -Xms2g -Xmx4g demo2.jar --spring.config.location=file:./config/demo2.yml",
+        "HealthCheckUrl": "backend/system/info",
+		"ServicePort": "9801"
+	}
+}
