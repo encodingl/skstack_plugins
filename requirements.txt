@@ -1,5 +1,5 @@
 #pl_static_deploy dependent library
-GitPython==2.1.5
+GitPython==3.1.32
 bs4==0.0.1
 gitdb2==2.0.6
 aliyun-python-sdk-cr==4.1.2
